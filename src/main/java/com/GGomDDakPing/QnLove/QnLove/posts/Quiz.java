@@ -1,38 +1,36 @@
-package com.GGomDDakPing.QnLove.posts;
+package com.GGomDDakPing.QnLove.QnLove.posts;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
+@Table
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+public class Quiz {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne
-  @JoinColumn(name = "memberId", nullable = false)
-  private Member member;
-
-  @Column(nullable = false)
-  private String title;
+  @JoinColumn(name = "postId", nullable = false)
+  private Post post;
 
   @Column(nullable = false)
   private String content;
 
   @Column(nullable = false)
-  private String answer;
+  private Long answer;
 
   @CreationTimestamp
   private LocalDateTime createdAt;
@@ -40,10 +38,13 @@ public class Post {
   @LastModifiedDate
   private LocalDateTime updatedAt;
 
-  @Column(nullable = false)
-  private boolean isDeleted = false;
+  @Column(nullable = true)
+  private boolean isDeleted;
 
-  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Quiz> quiz;
+  public Quiz(Post post, String content, Long answer) {
+    this.post = post;
+    this.content = content;
+    this.answer = answer;
+  }
 
 }
