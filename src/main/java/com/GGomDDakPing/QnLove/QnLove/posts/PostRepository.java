@@ -1,4 +1,4 @@
-package com.GGomDDakPing.QnLove.posts;
+package com.GGomDDakPing.QnLove.QnLove.posts;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

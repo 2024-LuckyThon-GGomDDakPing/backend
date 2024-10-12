@@ -1,4 +1,4 @@
-package com.GGomDDakPing.QnLove.swagger;
+package com.GGomDDakPing.QnLove.QnLove.swagger;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
