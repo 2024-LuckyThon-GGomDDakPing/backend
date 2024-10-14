@@ -1,6 +1,7 @@
 package com.GGomDDakPing.QnLove.QnLove.posts;
 
 import com.GGomDDakPing.QnLove.QnLove.members.Member;
+import com.GGomDDakPing.QnLove.QnLove.quizs.Quiz;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,8 +10,10 @@ import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @Builder
@@ -31,9 +34,6 @@ public class Post {
 
   @Column(nullable = false)
   private String content;
-
-  @Column(nullable = false)
-  private String answer;
 
   @CreationTimestamp
   private LocalDateTime createdAt;

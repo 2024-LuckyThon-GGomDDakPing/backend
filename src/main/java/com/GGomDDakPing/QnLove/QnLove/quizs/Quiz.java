@@ -1,5 +1,6 @@
-package com.GGomDDakPing.QnLove.QnLove.posts;
+package com.GGomDDakPing.QnLove.QnLove.quizs;
 
+import com.GGomDDakPing.QnLove.QnLove.posts.Post;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
