@@ -1,4 +1,4 @@
-package com.GGomDDakPing.QnLove.QnLove.posts;
+package com.GGomDDakPing.QnLove.QnLove.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

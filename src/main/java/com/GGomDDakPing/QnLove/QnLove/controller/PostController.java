@@ -1,8 +1,12 @@
-package com.GGomDDakPing.QnLove.QnLove.posts;
+package com.GGomDDakPing.QnLove.QnLove.controller;
 
-import com.GGomDDakPing.QnLove.QnLove.members.Member;
+import com.GGomDDakPing.QnLove.QnLove.dto.CreatePostDTO;
+import com.GGomDDakPing.QnLove.QnLove.entity.Member;
 
-import com.GGomDDakPing.QnLove.QnLove.members.MemberRepository;
+import com.GGomDDakPing.QnLove.QnLove.entity.Post;
+import com.GGomDDakPing.QnLove.QnLove.dto.PostListDTO;
+import com.GGomDDakPing.QnLove.QnLove.service.PostService;
+import com.GGomDDakPing.QnLove.QnLove.repository.MemberRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,10 +16,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
