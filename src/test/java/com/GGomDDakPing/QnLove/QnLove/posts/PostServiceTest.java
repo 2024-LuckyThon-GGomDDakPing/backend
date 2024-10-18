@@ -1,13 +1,14 @@
 package com.GGomDDakPing.QnLove.QnLove.posts;
 
-import com.GGomDDakPing.QnLove.QnLove.members.Member;
+import com.GGomDDakPing.QnLove.QnLove.entity.Member;
+import com.GGomDDakPing.QnLove.QnLove.entity.Post;
+import com.GGomDDakPing.QnLove.QnLove.repository.PostRepository;
+import com.GGomDDakPing.QnLove.QnLove.service.PostService;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest

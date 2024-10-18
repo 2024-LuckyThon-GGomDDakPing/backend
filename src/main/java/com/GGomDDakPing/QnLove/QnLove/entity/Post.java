@@ -1,7 +1,5 @@
-package com.GGomDDakPing.QnLove.QnLove.posts;
+package com.GGomDDakPing.QnLove.QnLove.entity;
 
-import com.GGomDDakPing.QnLove.QnLove.members.Member;
-import com.GGomDDakPing.QnLove.QnLove.quizs.Quiz;
 import jakarta.persistence.*;
 import lombok.*;
 

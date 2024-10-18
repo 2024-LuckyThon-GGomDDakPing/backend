@@ -1,5 +1,7 @@
-package com.GGomDDakPing.QnLove.QnLove.posts;
+package com.GGomDDakPing.QnLove.QnLove.service;
 
+import com.GGomDDakPing.QnLove.QnLove.entity.Post;
+import com.GGomDDakPing.QnLove.QnLove.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
