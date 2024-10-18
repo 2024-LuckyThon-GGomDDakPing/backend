@@ -51,7 +51,7 @@ public class Member {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL , orphanRemoval = true)
+    @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL , orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Post> post;
 
 }

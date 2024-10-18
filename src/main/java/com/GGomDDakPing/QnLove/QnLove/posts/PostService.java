@@ -54,9 +54,17 @@ public class PostService {
    * GET
    */
   public Optional<Post> getPostById(Long postId) {
-    checkPostExists(postId);
-    return postRepository.findById(postId);
+    // 게시물 조회
+    Optional<Post> post = postRepository.findById(postId);
+
+    // 게시물이 존재하지 않을 경우 예외 처리
+    if (post.isEmpty()) {
+      throw new IllegalArgumentException("Post with ID " + postId + " not found");
+    }
+
+    return post; // 존재하는 경우 Optional<Post> 반환
   }
+
 
   /**
    * 특정 게시물 존재 검증
