@@ -5,6 +5,7 @@ import com.GGomDDakPing.QnLove.QnLove.entity.Member;
 
 import com.GGomDDakPing.QnLove.QnLove.entity.Post;
 import com.GGomDDakPing.QnLove.QnLove.dto.PostListDTO;
+import com.GGomDDakPing.QnLove.QnLove.response.PostResponse;
 import com.GGomDDakPing.QnLove.QnLove.service.PostService;
 import com.GGomDDakPing.QnLove.QnLove.repository.MemberRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -95,9 +96,7 @@ public class PostController {
 
   /**
    * 게시물 삭제 API
-   *
    * @author frozzun
-   *
    * @param postId 글 아이디
    */
   @DeleteMapping("/{postId}")
@@ -110,9 +109,7 @@ public class PostController {
     @ApiResponse(responseCode = "204", description = "게시물 삭제 성공"),
     @ApiResponse(responseCode = "404", description = "")
   })
-  public void deletePost(
-    @Parameter(description = "ID of the post to be deleted")
-    @PathVariable Long postId) {
+  public void deletePost(@Parameter(description = "ID of the post to be deleted") @PathVariable Long postId) {
       postService.deletePost(postId);
   }
 
@@ -124,6 +121,7 @@ public class PostController {
 
   /**
    * 전체 게시물 조회 API
+   * @author frozzun
    */
   @GetMapping
   @Operation(
@@ -134,19 +132,41 @@ public class PostController {
     List<Post> posts = postService.getAllPosts();
 
     return posts.stream().map(post -> {
-      PostListDTO dto = new PostListDTO();
-      dto.setPostId(post.getId());
-      dto.setTitle(post.getTitle());
-      dto.setContent(post.getContent());
-      dto.setMemberId(post.getMember().getId());
-      return dto;
+      return PostListDTO.builder()
+        .postId(post.getId())
+        .title(post.getTitle())
+        .content(post.getContent())
+        .memberId(post.getMember().getId())
+        .build();
     }).toList();
   }
 
 
   /**
    * 특정 게시물 조회 API
+   * @author frozzun
+   * @param postId 글 아이디
    */
+  @GetMapping("/{postId}")
+  @Operation(
+    summary = "특정 게시물 조회",
+    description = "특정 게시물을 조회할 때 사용하는 API"
+  )
+  @Parameter(name = "postId", description = "글 Id", example = "1")
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "204", description = "게시물 조회 성공"),
+    @ApiResponse(responseCode = "404", description = "")
+  })
+  public PostListDTO getPost(@PathVariable Long postId) {
+    Post post = postService.getPostById(postId).get();
+
+    return PostListDTO.builder()
+      .postId(post.getId())
+      .title(post.getTitle())
+      .content(post.getContent())
+      .memberId(post.getMember().getId())
+      .build();
+  }
 
 
 }
