@@ -1,11 +1,13 @@
 package com.GGomDDakPing.QnLove.QnLove.dto;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class PostListDTO {
   @NotNull(message = "id cannot be null")
   private Long postId;
