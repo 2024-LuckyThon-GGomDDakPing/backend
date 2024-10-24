@@ -1,13 +1,15 @@
 package com.GGomDDakPing.QnLove.QnLove.controller;
 
-import com.GGomDDakPing.QnLove.QnLove.dto.CreatePostDTO;
+import com.GGomDDakPing.QnLove.QnLove.dto.CreatePostDto;
+import com.GGomDDakPing.QnLove.QnLove.dto.QuizDto;
 import com.GGomDDakPing.QnLove.QnLove.entity.Member;
 
 import com.GGomDDakPing.QnLove.QnLove.entity.Post;
-import com.GGomDDakPing.QnLove.QnLove.dto.PostListDTO;
-import com.GGomDDakPing.QnLove.QnLove.response.PostResponse;
+import com.GGomDDakPing.QnLove.QnLove.dto.PostListDto;
+import com.GGomDDakPing.QnLove.QnLove.entity.Quiz;
 import com.GGomDDakPing.QnLove.QnLove.service.PostService;
 import com.GGomDDakPing.QnLove.QnLove.repository.MemberRepository;
+import com.GGomDDakPing.QnLove.QnLove.service.QuizService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,6 +21,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,20 +29,24 @@ import java.util.Optional;
 @RequestMapping("/posts")
 public class PostController {
   private PostService postService;
+  private QuizService quizService;
 //  private MemberService memberService;
 
   //임시 코드
   @Autowired
   private MemberRepository memberRepository;
 
+
   @Autowired
-  public PostController(PostService postService) {
+  public PostController(PostService postService, QuizService quizService) {
     this.postService = postService;
+    this.quizService = quizService;
   }
 
-//  public PostController(PostService postService, MemberService memberService) {
+//  public PostController(PostService postService, MemberService memberService, QuizService quizService) {
 //    this.postService = postService;
 //    this.memberService = memberService;
+//    this.quizService = quizService;
 //  }
 
   /**
@@ -57,7 +64,7 @@ public class PostController {
       required = true,
       content = @Content(
           mediaType = "application/json",
-          schema = @Schema(implementation = CreatePostDTO.class)
+          schema = @Schema(implementation = CreatePostDto.class)
       )
     )
   )
@@ -65,7 +72,7 @@ public class PostController {
     @ApiResponse(responseCode = "200", description = "게시물 생성 성공"),
     @ApiResponse(responseCode = "404", description = "")
   })
-  public void createPost(@org.springframework.web.bind.annotation.RequestBody CreatePostDTO createPostDto) {
+  public void createPost(@org.springframework.web.bind.annotation.RequestBody CreatePostDto createPostDto) {
     //add debug log
     System.out.println("CreatePostDto received: MemberId = " + createPostDto.getMemberId() + ", Title = " + createPostDto.getTitle() + ", Content = " + createPostDto.getContent());
 
@@ -89,6 +96,20 @@ public class PostController {
       Long Id = postService.addPost(post);
       //Post id log
       System.out.println("Created post id = " + Id);
+
+      List<QuizDto> quizDtoList = createPostDto.getQuizList();
+
+      // QuizDto 리스트를 Quiz 리스트로 변환 (빌더 사용)
+      List<Quiz> quizList = quizDtoList.stream()
+        .map(quizDto -> Quiz.builder()
+          .post(post)
+          .content(quizDto.getContent())
+          .answer(quizDto.getAnswer())
+          .build())
+        .toList();
+
+      quizService.createQuizzes(quizList);
+
     } else {
       throw new IllegalArgumentException("Member with ID " + createPostDto.getMemberId() + " not found");
     }
@@ -128,11 +149,11 @@ public class PostController {
     summary = "전체 게시물 조회",
     description = "전체 게시물을 조회 할 때 사용하는 API"
   )
-  public List<PostListDTO> getAllPosts() {
+  public List<PostListDto> getAllPosts() {
     List<Post> posts = postService.getAllPosts();
 
     return posts.stream().map(post -> {
-      return PostListDTO.builder()
+      return PostListDto.builder()
         .postId(post.getId())
         .title(post.getTitle())
         .content(post.getContent())
@@ -157,10 +178,10 @@ public class PostController {
     @ApiResponse(responseCode = "204", description = "게시물 조회 성공"),
     @ApiResponse(responseCode = "404", description = "")
   })
-  public PostListDTO getPost(@PathVariable Long postId) {
+  public PostListDto getPost(@PathVariable Long postId) {
     Post post = postService.getPostById(postId).get();
 
-    return PostListDTO.builder()
+    return PostListDto.builder()
       .postId(post.getId())
       .title(post.getTitle())
       .content(post.getContent())
