@@ -8,16 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class PostListDTO {
-  @NotNull(message = "id cannot be null")
-  private Long postId;
-
-  @NotNull(message = "title cannot be null")
-  private String title;
-
+public class QuizDto {
   @NotNull(message = "content cannot be null")
   private String content;
-
-  @NotNull(message = "memberId cannot be null")
-  private Long memberId;
+  @NotNull(message = "answer cannot be null")
+  private Long answer;
 }
