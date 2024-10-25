@@ -5,11 +5,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 
 @Getter
 @Setter
 @Builder
-public class PostListDto {
+public class PostDetailDto {
   @NotNull(message = "id cannot be null")
   private Long postId;
 
@@ -21,4 +22,7 @@ public class PostListDto {
 
   @NotNull(message = "memberId cannot be null")
   private Long memberId;
+
+  @NotNull(message = "quizList cannot be null")
+  private List<QuizDto> quizDtoList;
 }

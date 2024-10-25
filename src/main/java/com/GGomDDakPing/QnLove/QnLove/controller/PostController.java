@@ -1,6 +1,7 @@
 package com.GGomDDakPing.QnLove.QnLove.controller;
 
 import com.GGomDDakPing.QnLove.QnLove.dto.CreatePostDto;
+import com.GGomDDakPing.QnLove.QnLove.dto.PostDetailDto;
 import com.GGomDDakPing.QnLove.QnLove.dto.QuizDto;
 import com.GGomDDakPing.QnLove.QnLove.entity.Member;
 
@@ -21,7 +22,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,14 +97,14 @@ public class PostController {
       //Post id log
       System.out.println("Created post id = " + Id);
 
-      List<QuizDto> quizDtoList = createPostDto.getQuizList();
+      List<QuizDto> quizListDto = createPostDto.getQuizList();
 
       // QuizDto 리스트를 Quiz 리스트로 변환 (빌더 사용)
-      List<Quiz> quizList = quizDtoList.stream()
+      List<Quiz> quizList = quizListDto.stream()
         .map(quizDto -> Quiz.builder()
           .post(post)
           .content(quizDto.getContent())
-          .answer(quizDto.getAnswer())
+          .answer(quizDto.isAnswer())
           .build())
         .toList();
 
@@ -150,9 +150,9 @@ public class PostController {
     description = "전체 게시물을 조회 할 때 사용하는 API"
   )
   public List<PostListDto> getAllPosts() {
-    List<Post> posts = postService.getAllPosts();
+    List<Post> postList = postService.getAllPosts();
 
-    return posts.stream().map(post -> {
+    return postList.stream().map(post -> {
       return PostListDto.builder()
         .postId(post.getId())
         .title(post.getTitle())
@@ -178,16 +178,25 @@ public class PostController {
     @ApiResponse(responseCode = "204", description = "게시물 조회 성공"),
     @ApiResponse(responseCode = "404", description = "")
   })
-  public PostListDto getPost(@PathVariable Long postId) {
+  public PostDetailDto getPost(@PathVariable Long postId) {
     Post post = postService.getPostById(postId).get();
 
-    return PostListDto.builder()
+    List<Quiz> quizList = quizService.getQuizListByPost(post);
+
+    List<QuizDto> quizListDto = quizList.stream()
+      .map(quiz -> QuizDto.builder()
+        .content(quiz.getContent())
+        .answer(quiz.isAnswer())
+        .build())
+      .toList();
+
+
+    return PostDetailDto.builder()
       .postId(post.getId())
       .title(post.getTitle())
       .content(post.getContent())
       .memberId(post.getMember().getId())
+      .quizDtoList(quizListDto)
       .build();
   }
-
-
 }
