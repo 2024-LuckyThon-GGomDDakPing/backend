@@ -39,6 +39,7 @@ public class Post {
   private LocalDateTime updatedAt;
 
   @Column(nullable = false)
+  @Builder.Default
   private boolean isDeleted = false;
 
   @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

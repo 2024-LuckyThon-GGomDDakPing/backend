@@ -1,5 +1,6 @@
 package com.GGomDDakPing.QnLove.QnLove.service;
 
+import com.GGomDDakPing.QnLove.QnLove.entity.Post;
 import com.GGomDDakPing.QnLove.QnLove.entity.Quiz;
 import com.GGomDDakPing.QnLove.QnLove.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class QuizService {
   /**
    * 퀴즈 조회
    */
-
+  public List<Quiz> getQuizListByPost(Post post) {
+    return quizRepository.findAllByPost(post);
+  }
 
 }

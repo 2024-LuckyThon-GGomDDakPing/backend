@@ -12,5 +12,5 @@ public class QuizDto {
   @NotNull(message = "content cannot be null")
   private String content;
   @NotNull(message = "answer cannot be null")
-  private Long answer;
+  private boolean answer;
 }

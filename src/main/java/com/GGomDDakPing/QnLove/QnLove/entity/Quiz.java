@@ -29,7 +29,7 @@ public class Quiz {
   private String content;
 
   @Column(nullable = false)
-  private Long answer;
+  private boolean answer;
 
   @CreationTimestamp
   private LocalDateTime createdAt;
@@ -38,9 +38,10 @@ public class Quiz {
   private LocalDateTime updatedAt;
 
   @Column(nullable = true)
-  private boolean isDeleted;
+  @Builder.Default
+  private boolean isDeleted = false;
 
-  public Quiz(Post post, String content, Long answer) {
+  public Quiz(Post post, String content, boolean answer) {
     this.post = post;
     this.content = content;
     this.answer = answer;

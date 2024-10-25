@@ -39,8 +39,10 @@ public class Member {
 
     private Long age;
 
+    @Builder.Default
     private boolean isConnected = false;
 
+    @Builder.Default
     private boolean isDeleted = false;
 
     @LastModifiedDate
