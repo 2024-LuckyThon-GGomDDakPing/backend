@@ -27,6 +27,9 @@ public class Member {
     @Column(unique = true , nullable = false , length = 30)
     private String name;
 
+    @Column(nullable = false)
+    private String profileImage;
+
     @Column(unique = true , nullable = false , length = 50)
     private String email;
 
