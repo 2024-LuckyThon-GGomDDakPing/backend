@@ -1,6 +1,5 @@
-package com.GGomDDakPing.QnLove.QnLove.posts;
+package com.GGomDDakPing.QnLove.QnLove.entity;
 
-import com.GGomDDakPing.QnLove.QnLove.members.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,10 +8,11 @@ import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,7 +22,7 @@ public class Post {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "memberId", nullable = false)
   private Member member;
 
@@ -32,9 +32,6 @@ public class Post {
   @Column(nullable = false)
   private String content;
 
-  @Column(nullable = false)
-  private String answer;
-
   @CreationTimestamp
   private LocalDateTime createdAt;
 
@@ -42,9 +39,10 @@ public class Post {
   private LocalDateTime updatedAt;
 
   @Column(nullable = false)
+  @Builder.Default
   private boolean isDeleted = false;
 
-  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   private List<Quiz> quiz;
 
 }

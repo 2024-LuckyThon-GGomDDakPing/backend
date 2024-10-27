@@ -1,6 +1,5 @@
-package com.GGomDDakPing.QnLove.QnLove.members;
+package com.GGomDDakPing.QnLove.QnLove.entity;
 
-import com.GGomDDakPing.QnLove.QnLove.posts.Post;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -43,8 +42,10 @@ public class Member {
 
     private Long age;
 
+    @Builder.Default
     private boolean isConnected = false;
 
+    @Builder.Default
     private boolean isDeleted = false;
 
     @LastModifiedDate
@@ -54,7 +55,7 @@ public class Member {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL , orphanRemoval = true)
+    @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL , orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Post> post;
 
 }

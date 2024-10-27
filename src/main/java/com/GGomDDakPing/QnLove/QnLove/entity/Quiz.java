@@ -1,4 +1,4 @@
-package com.GGomDDakPing.QnLove.QnLove.posts;
+package com.GGomDDakPing.QnLove.QnLove.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @Table
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,7 +21,7 @@ public class Quiz {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "postId", nullable = false)
   private Post post;
 
@@ -30,7 +29,7 @@ public class Quiz {
   private String content;
 
   @Column(nullable = false)
-  private Long answer;
+  private boolean answer;
 
   @CreationTimestamp
   private LocalDateTime createdAt;
@@ -39,9 +38,10 @@ public class Quiz {
   private LocalDateTime updatedAt;
 
   @Column(nullable = true)
-  private boolean isDeleted;
+  @Builder.Default
+  private boolean isDeleted = false;
 
-  public Quiz(Post post, String content, Long answer) {
+  public Quiz(Post post, String content, boolean answer) {
     this.post = post;
     this.content = content;
     this.answer = answer;
