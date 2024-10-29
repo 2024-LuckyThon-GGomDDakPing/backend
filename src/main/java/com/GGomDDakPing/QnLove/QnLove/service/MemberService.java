@@ -17,7 +17,7 @@ public class MemberService {
     }
 
     @Transactional
-    public Member registerMember(Member member) {
+    public void registerMember(Member member) {
         if (memberRepository.findByEmail(member.getEmail()).isPresent()) {
             throw new Exceptionals("이미 사용 중인 이메일입니다.");
         }
@@ -27,6 +27,6 @@ public class MemberService {
         if (memberRepository.findByInstagramId(member.getInstagramId()).isPresent()) {
             throw new Exceptionals("이미 사용 중인 인스타그램 ID입니다.");
         }
-        return memberRepository.save(member);
+        memberRepository.save(member);
     }
 }

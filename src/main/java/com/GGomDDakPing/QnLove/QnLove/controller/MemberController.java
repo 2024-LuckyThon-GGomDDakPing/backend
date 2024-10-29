@@ -44,8 +44,18 @@ public class MemberController {
     })
     @PostMapping("/register")
     public void  postRegister(@RequestBody @Valid PostRegisterDto postRegisterDto) {
-        Member member = postRegisterDto.toEntity();
-        Member registeredMember = memberService.registerMember(member);
-//        return ResponseEntity.status(200).body(registeredMember);
+        Member member1 = Member.builder()
+                .loginId(postRegisterDto.getLoginId())
+                .password(postRegisterDto.getPassword())
+                .name(postRegisterDto.getName())
+                .email(postRegisterDto.getEmail())
+                .instagramId(postRegisterDto.getInstagramId())
+                .sex(postRegisterDto.getSex())
+                .age(postRegisterDto.getAge())
+                .build();
+        // Member member = postRegisterDto.toEntity();
+        // Member registeredMember =
+        memberService.registerMember(member1);
+//     // return ResponseEntity.status(200).body(registeredMember);
     }
 }
