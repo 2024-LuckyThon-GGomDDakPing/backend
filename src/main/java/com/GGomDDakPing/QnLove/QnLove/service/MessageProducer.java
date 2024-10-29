@@ -20,17 +20,5 @@ public class MessageProducer {
       RabbitMQConfig.EXCHANGE_NAME, "routing.key", message);
     System.out.println("Sent: " + message);
   }
-
-  // MessageProducer.java (메시지 생산자)
-  public void sendMessageToSession(String sessionId, String message) {
-    String routingKey = getRoutingKeyForSession(sessionId);
-    rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, routingKey, message);
-  }
-
-  // 라우팅 키 생성 메소드
-  private String getRoutingKeyForSession(String sessionId) {
-    return "chat." + sessionId; // 예: chat.session1
-  }
-
 }
 
