@@ -43,19 +43,30 @@ public class MemberController {
             @ApiResponse(responseCode = "409", description = "중복된 데이터")
     })
     @PostMapping("/register")
-    public void  postRegister(@RequestBody @Valid PostRegisterDto postRegisterDto) {
-        Member member1 = Member.builder()
-                .loginId(postRegisterDto.getLoginId())
-                .password(postRegisterDto.getPassword())
-                .name(postRegisterDto.getName())
-                .email(postRegisterDto.getEmail())
-                .instagramId(postRegisterDto.getInstagramId())
-                .sex(postRegisterDto.getSex())
-                .age(postRegisterDto.getAge())
-                .build();
-        // Member member = postRegisterDto.toEntity();
-        // Member registeredMember =
-        memberService.registerMember(member1);
-//     // return ResponseEntity.status(200).body(registeredMember);
+    public void  postRegister(@Valid @org.springframework.web.bind.annotation.RequestBody  PostRegisterDto postRegisterDto) {
+        System.out.println("=== DTO 값 확인 ===");
+        System.out.println("loginId: " + postRegisterDto.getLoginId());
+        System.out.println("password: " + postRegisterDto.getPassword());
+        System.out.println("name: " + postRegisterDto.getName());
+        System.out.println("email: " + postRegisterDto.getEmail());
+        System.out.println("sex: " + postRegisterDto.getSex());
+        System.out.println("age: " + postRegisterDto.getAge());
+        System.out.println("instagramId: " + postRegisterDto.getInstagramId());
+        System.out.println("profileImage: " + postRegisterDto.getProfileImage());
+
+        Member member = postRegisterDto.toEntity();
+
+        // Entity 각 필드 값 출력
+        System.out.println("=== Entity 값 확인 ===");
+        System.out.println("loginId: " + member.getLoginId());
+        System.out.println("password: " + member.getPassword());
+        System.out.println("name: " + member.getName());
+        System.out.println("email: " + member.getEmail());
+        System.out.println("sex: " + member.getSex());
+        System.out.println("age: " + member.getAge());
+        System.out.println("instagramId: " + member.getInstagramId());
+        System.out.println("profileImage: " + member.getProfileImage());
+
+        memberService.registerMember(member);
     }
 }

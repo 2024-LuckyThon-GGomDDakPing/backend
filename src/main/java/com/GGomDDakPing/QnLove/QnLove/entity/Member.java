@@ -41,8 +41,10 @@ public class Member {
     @Column(unique = true , nullable = false , length = 50)
     private String loginId;
 
+    @Column(nullable = false)
     private Long sex;
 
+    @Column(nullable = false)
     private Long age;
 
     @Builder.Default
