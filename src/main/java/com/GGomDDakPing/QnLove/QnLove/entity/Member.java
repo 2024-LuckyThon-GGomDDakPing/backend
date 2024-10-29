@@ -26,6 +26,9 @@ public class Member {
     @Column(unique = true , nullable = false , length = 30)
     private String name;
 
+    @Column(nullable = false)
+    private String profileImage;
+
     @Column(unique = true , nullable = false , length = 50)
     private String email;
 
@@ -34,6 +37,9 @@ public class Member {
 
     @Column(nullable = false , length = 100)
     private String password;
+
+    @Column(unique = true , nullable = false , length = 50)
+    private String loginId;
 
     private Long sex;
 
