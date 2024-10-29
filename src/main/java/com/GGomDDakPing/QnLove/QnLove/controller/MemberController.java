@@ -43,9 +43,9 @@ public class MemberController {
             @ApiResponse(responseCode = "409", description = "중복된 데이터")
     })
     @PostMapping("/register")
-    public ResponseEntity<Member> postRegister(@RequestBody @Valid PostRegisterDto postRegisterDto) {
+    public void  postRegister(@RequestBody @Valid PostRegisterDto postRegisterDto) {
         Member member = postRegisterDto.toEntity();
         Member registeredMember = memberService.registerMember(member);
-        return ResponseEntity.status(200).body(registeredMember);
+//        return ResponseEntity.status(200).body(registeredMember);
     }
 }
