@@ -1,4 +1,4 @@
- --init.sql
+ -- init.sql
 CREATE DATABASE IF NOT EXISTS crud;
 CREATE USER 'qnlove'@'%' IDENTIFIED BY 'chanyoup1@';
 GRANT ALL PRIVILEGES ON crud.* TO 'qnlove'@'%';
