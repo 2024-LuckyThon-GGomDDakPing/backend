@@ -7,6 +7,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 public class MemberService {
@@ -31,13 +33,22 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public void loginMember(Member member) {
-        if (memberRepository.findByLoginId(member.getLoginId()).isEmpty()) {
+    public Member loginMember(String loginId, String password) {
+        Optional<Member> member = memberRepository.findByLoginId(loginId);
+        if (member.isEmpty()) {
             throw new Exceptionals("존재하지 않는 아이디입니다.");
         }
-        if (memberRepository.findByPassword(member.getPassword()).isEmpty()) {
+        Member user = member.get();
+        if (!user.getPassword().equals(password)) {
             throw new Exceptionals("비밀번호가 일치하지 않습니다.");
         }
+        user.setConnected(true);
+        memberRepository.save(user);
+        return user;
+    }
 
+    public Member getMemberById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new Exceptionals("존재하지 않는 회원입니다."));
     }
 }

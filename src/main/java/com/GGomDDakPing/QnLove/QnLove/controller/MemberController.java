@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -77,15 +78,7 @@ public class MemberController {
     })
     @PostMapping("/login")
     public void postLogin(@Valid @org.springframework.web.bind.annotation.RequestBody MemberLoginDto pld, HttpServletRequest httpServletRequest) {
-        Optional<Member> member = memberRepository.findByLoginId(pld.getLoginId());
-        if (member.isEmpty()) {
-            throw new Exceptionals("존재하지 않는 아이디입니다.");
-        }
-        Member user = member.get();
-        if(!user.getPassword().equals(pld.getPassword())) {
-            throw new Exceptionals("비밀번호가 일치하지 않습니다.");
-        }
-        user.setConnected(true);
+        Member user = memberService.loginMember(pld.getLoginId(), pld.getPassword());
         httpServletRequest.getSession().invalidate();
         HttpSession session = httpServletRequest.getSession(true);
         session.setAttribute("userId", user.getId());
@@ -122,14 +115,55 @@ public class MemberController {
     })
     @GetMapping("/session-list")
     public Map<String, String> sessionList() {
-        Enumeration elements = sessionList.elements();
         Map<String, String> lists = new HashMap<>();
-        while(elements.hasMoreElements()) {
-            HttpSession session = (HttpSession)elements.nextElement();
-            lists.put(session.getId(), String.valueOf(session.getAttribute("userId")));
+
+        // Create a copy of session IDs to avoid concurrent modification
+        List<String> sessionIds = new ArrayList<>(sessionList.keySet());
+
+        for (String sessionId : sessionIds) {
+            try {
+                HttpSession session = sessionList.get(sessionId);
+                if (session != null) {
+                    Object userId = session.getAttribute("userId");
+                    if (userId != null) {
+                        lists.put(sessionId, String.valueOf(userId));
+                    }
+                }
+            } catch (IllegalStateException e) {
+                // Remove invalid session
+                sessionList.remove(sessionId);
+            }
         }
+
         return lists;
     }
 
+    @Operation(
+            summary = "회원 정보 조회",
+            description = "회원 정보 조회 API"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 회원"),
+    })
+    @GetMapping("/{id}")
+    public Member getMember(@PathVariable Long id) {
+        return memberService.getMemberById(id);
+    }
+
+    @Scheduled(fixedRate = 900000) // Run every 15 minutes
+    public void cleanupSessions() {
+        List<String> sessionIds = new ArrayList<>(sessionList.keySet());
+        for (String sessionId : sessionIds) {
+            try {
+                HttpSession session = sessionList.get(sessionId);
+                if (session == null || session.getAttribute("userId") == null) {
+                    sessionList.remove(sessionId);
+                }
+            } catch (IllegalStateException e) {
+                sessionList.remove(sessionId);
+            }
+        }
+    }
 
 }
