@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @Builder
 @AllArgsConstructor
-public class CreatePostDto {
+public class PostCreateDto {
   @NotNull(message = "member cannot be null")
   private Long memberId;
 

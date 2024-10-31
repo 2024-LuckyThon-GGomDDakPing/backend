@@ -1,6 +1,6 @@
 package com.GGomDDakPing.QnLove.QnLove.controller;
 
-import com.GGomDDakPing.QnLove.QnLove.dto.CreatePostDto;
+import com.GGomDDakPing.QnLove.QnLove.dto.PostCreateDto;
 import com.GGomDDakPing.QnLove.QnLove.dto.PostDetailDto;
 import com.GGomDDakPing.QnLove.QnLove.dto.QuizDto;
 import com.GGomDDakPing.QnLove.QnLove.entity.Member;
@@ -8,8 +8,8 @@ import com.GGomDDakPing.QnLove.QnLove.entity.Member;
 import com.GGomDDakPing.QnLove.QnLove.entity.Post;
 import com.GGomDDakPing.QnLove.QnLove.dto.PostListDto;
 import com.GGomDDakPing.QnLove.QnLove.entity.Quiz;
+import com.GGomDDakPing.QnLove.QnLove.service.MemberService;
 import com.GGomDDakPing.QnLove.QnLove.service.PostService;
-import com.GGomDDakPing.QnLove.QnLove.repository.MemberRepository;
 import com.GGomDDakPing.QnLove.QnLove.service.QuizService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,29 +30,21 @@ import java.util.Optional;
 public class PostController {
   private PostService postService;
   private QuizService quizService;
-//  private MemberService memberService;
+  private MemberService memberService;
 
-  //임시 코드
-  @Autowired
-  private MemberRepository memberRepository;
 
 
   @Autowired
-  public PostController(PostService postService, QuizService quizService) {
+  public PostController(PostService postService, MemberService memberService, QuizService quizService) {
     this.postService = postService;
+    this.memberService = memberService;
     this.quizService = quizService;
   }
-
-//  public PostController(PostService postService, MemberService memberService, QuizService quizService) {
-//    this.postService = postService;
-//    this.memberService = memberService;
-//    this.quizService = quizService;
-//  }
 
   /**
    * 게시물 생성 API
    * @author frozzun
-   * @param createPostDto createPostDTO
+   * @param postCreateDto createPostDTO
    */
   @PostMapping
   @ResponseBody
@@ -64,7 +56,7 @@ public class PostController {
       required = true,
       content = @Content(
           mediaType = "application/json",
-          schema = @Schema(implementation = CreatePostDto.class)
+          schema = @Schema(implementation = PostCreateDto.class)
       )
     )
   )
@@ -72,32 +64,31 @@ public class PostController {
     @ApiResponse(responseCode = "200", description = "게시물 생성 성공"),
     @ApiResponse(responseCode = "404", description = "")
   })
-  public void createPost(@org.springframework.web.bind.annotation.RequestBody CreatePostDto createPostDto) {
+  public void createPost(@org.springframework.web.bind.annotation.RequestBody PostCreateDto postCreateDto) {
     //add debug log
-    System.out.println("CreatePostDto received: MemberId = " + createPostDto.getMemberId() + ", Title = " + createPostDto.getTitle() + ", Content = " + createPostDto.getContent());
+    System.out.println("PostCreateDto received: MemberId = " + postCreateDto.getMemberId() + ", Title = " + postCreateDto.getTitle() + ", Content = " + postCreateDto.getContent());
 
     //매핑 확인
-    if (createPostDto.getTitle() == null || createPostDto.getContent() == null || createPostDto.getMemberId() == null) {
+    if (postCreateDto.getTitle() == null || postCreateDto.getContent() == null || postCreateDto.getMemberId() == null) {
       throw new IllegalArgumentException("Invalid input data: MemberId or Title or Content is null");
     }
 
     //임시 코드
-    Optional<Member> OPmember = memberRepository.findById(createPostDto.getMemberId());
-//    Optional<Member> OPmember = memberService.findById(createPostDto.getMemberId());
+    Optional<Member> OPmember = memberService.findById(postCreateDto.getMemberId());
 
     if (OPmember.isPresent()) {
       Member member = OPmember.get();
       Post post = Post.builder()
         .member(member)
-        .title(createPostDto.getTitle())
-        .content(createPostDto.getContent())
+        .title(postCreateDto.getTitle())
+        .content(postCreateDto.getContent())
         .build();
 
       Long Id = postService.addPost(post);
       //Post id log
       System.out.println("Created post id = " + Id);
 
-      List<QuizDto> quizListDto = createPostDto.getQuizList();
+      List<QuizDto> quizListDto = postCreateDto.getQuizList();
 
       // QuizDto 리스트를 Quiz 리스트로 변환 (빌더 사용)
       List<Quiz> quizList = quizListDto.stream()
@@ -111,7 +102,7 @@ public class PostController {
       quizService.createQuizzes(quizList);
 
     } else {
-      throw new IllegalArgumentException("Member with ID " + createPostDto.getMemberId() + " not found");
+      throw new IllegalArgumentException("Member with ID " + postCreateDto.getMemberId() + " not found");
     }
   }
 
