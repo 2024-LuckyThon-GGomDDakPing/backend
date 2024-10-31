@@ -73,37 +73,28 @@ public class PostController {
       throw new IllegalArgumentException("Invalid input data: MemberId or Title or Content is null");
     }
 
-    //임시 코드
-    Optional<Member> OPmember = memberService.findById(postCreateDto.getMemberId());
+    Member member = memberService.getMemberById(postCreateDto.getMemberId());
+    Post post = Post.builder()
+      .member(member)
+      .title(postCreateDto.getTitle())
+      .content(postCreateDto.getContent())
+      .build();
 
-    if (OPmember.isPresent()) {
-      Member member = OPmember.get();
-      Post post = Post.builder()
-        .member(member)
-        .title(postCreateDto.getTitle())
-        .content(postCreateDto.getContent())
-        .build();
+    Long Id = postService.addPost(post);
+    //Post id log
+    System.out.println("Created post id = " + Id);
 
-      Long Id = postService.addPost(post);
-      //Post id log
-      System.out.println("Created post id = " + Id);
+    List<QuizDto> quizListDto = postCreateDto.getQuizList();
 
-      List<QuizDto> quizListDto = postCreateDto.getQuizList();
-
-      // QuizDto 리스트를 Quiz 리스트로 변환 (빌더 사용)
-      List<Quiz> quizList = quizListDto.stream()
-        .map(quizDto -> Quiz.builder()
-          .post(post)
-          .content(quizDto.getContent())
-          .answer(quizDto.isAnswer())
-          .build())
-        .toList();
-
-      quizService.createQuizzes(quizList);
-
-    } else {
-      throw new IllegalArgumentException("Member with ID " + postCreateDto.getMemberId() + " not found");
-    }
+    // QuizDto 리스트를 Quiz 리스트로 변환 (빌더 사용)
+    List<Quiz> quizList = quizListDto.stream()
+      .map(quizDto -> Quiz.builder()
+        .post(post)
+        .content(quizDto.getContent())
+        .answer(quizDto.isAnswer())
+        .build())
+      .toList();
+    quizService.createQuizzes(quizList);
   }
 
   /**
@@ -125,12 +116,6 @@ public class PostController {
       postService.deletePost(postId);
   }
 
-
-  /**
-   * 게시물 수정 API
-   */
-
-
   /**
    * 전체 게시물 조회 API
    * @author frozzun
@@ -143,14 +128,15 @@ public class PostController {
   public List<PostListDto> getAllPosts() {
     List<Post> postList = postService.getAllPosts();
 
-    return postList.stream().map(post -> {
-      return PostListDto.builder()
-        .postId(post.getId())
-        .title(post.getTitle())
-        .content(post.getContent())
-        .memberId(post.getMember().getId())
-        .build();
-    }).toList();
+    return postList.stream().map(post -> PostListDto.builder()
+      .postId(post.getId())
+      .memberId(post.getMember().getId())
+      .title(post.getTitle())
+      .content(post.getContent())
+      .profileImg(post.getMember().getProfileImage())
+      .nickname(post.getMember().getNickname())
+      .sex(post.getMember().getSex())
+      .build()).toList();
   }
 
 
@@ -184,9 +170,13 @@ public class PostController {
 
     return PostDetailDto.builder()
       .postId(post.getId())
+      .memberId(post.getMember().getId())
       .title(post.getTitle())
       .content(post.getContent())
-      .memberId(post.getMember().getId())
+      .profileImg(post.getMember().getProfileImage())
+      .name(post.getMember().getName())
+      .instagramId(post.getMember().getInstagramId())
+      .sex(post.getMember().getSex())
       .quizDtoList(quizListDto)
       .build();
   }
