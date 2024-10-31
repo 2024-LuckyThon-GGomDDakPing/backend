@@ -30,7 +30,7 @@ public class Member {
     private String profileImage;
 
     @Column(unique = true , nullable = false , length = 50)
-    private String email;
+    private String nickname;
 
     @Column(unique = true , nullable = false , length = 50)
     private String instagramId;
