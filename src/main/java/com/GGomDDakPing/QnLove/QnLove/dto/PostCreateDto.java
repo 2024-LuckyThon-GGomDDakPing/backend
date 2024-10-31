@@ -24,6 +24,6 @@ public class PostCreateDto {
   private String content;
 
   @NotNull(message = "Quizzes cannot be null")
-  @Size(min = 4, max = 4, message = "Exactly 4 quizzes must be provided")
+  @Size(min = 5, max = 5, message = "Exactly 5 quizzes must be provided")
   private List<QuizDto> quizList;
 }
