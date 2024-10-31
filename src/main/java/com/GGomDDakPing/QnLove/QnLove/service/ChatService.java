@@ -4,8 +4,7 @@ import com.GGomDDakPing.QnLove.QnLove.entity.ChatSession;
 import com.GGomDDakPing.QnLove.QnLove.entity.Message;
 import com.GGomDDakPing.QnLove.QnLove.repository.ChatSessionRepository;
 import com.GGomDDakPing.QnLove.QnLove.repository.MessageRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
@@ -15,11 +14,12 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 @Service
 public class ChatService {
 
-  private static final Logger log = LoggerFactory.getLogger(ChatService.class);
   private final RabbitTemplate rabbitTemplate;
   private final MessageRepository messageRepository;
   private final ChatSessionRepository chatSessionRepository;
@@ -50,7 +50,7 @@ public class ChatService {
 
     // 메시지 생성 및 저장
     Message message = new Message(senderId, receiverId, content, LocalDateTime.now());
-    log.info("ChatService - sendMessage 에서 " + message);
+    log.info("ChatService : sendMessage:  {}", message);
     messageRepository.save(message);
 
     rabbitTemplate.convertAndSend(queueName, message);
@@ -80,7 +80,7 @@ public class ChatService {
           // 수신된 메시지를 처리하는 로직
           try {
             Message receivedMessage = (Message) rabbitTemplate.getMessageConverter().fromMessage(message);
-            log.info("Received message: {}", receivedMessage);
+            log.info("ChatService : receivedMessage: {}", receivedMessage);
             // 추가적인 메시지 처리 로직을 여기에 작성하세요
           } catch (Exception e) {
             log.error(e.getMessage());
@@ -93,5 +93,11 @@ public class ChatService {
       log.error(e.getMessage());
     }
   }
+
+  public Optional<List<Message>> getMessages(Long senderId, Long receiverId) {
+    List<Message> messages = messageRepository.findBySenderIdAndReceiverId(senderId, receiverId);
+    return messages.isEmpty() ? Optional.empty() : Optional.of(messages);
+  }
+
 
 }

@@ -2,13 +2,16 @@ package com.GGomDDakPing.QnLove.QnLove.controller;
 
 import com.GGomDDakPing.QnLove.QnLove.entity.Message;
 import com.GGomDDakPing.QnLove.QnLove.service.ChatService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/chat")
 public class ChatController {
@@ -39,20 +42,11 @@ public class ChatController {
 
   // 채팅방 별 큐에서 수신 대기
   @GetMapping("/receive")
-  public ResponseEntity<Message> receiveMessage(@RequestParam Long senderId,
-                                                @RequestParam Long receiverId) {
-    String sessionId = chatService.generateSessionId(senderId, receiverId);
-    String queueName = "chat_queue_" + sessionId;
+  public ResponseEntity<List<Message>> receiveMessages(@RequestParam Long senderId,
+                                                       @RequestParam Long receiverId) {
+    Optional<List<Message>> optionalMessages = chatService.getMessages(senderId, receiverId);
 
-    // 큐에서 메시지 수신
-    Message message = (Message) rabbitTemplate.receiveAndConvert(queueName);
-
-    if (message != null) {
-      return ResponseEntity.ok(message);
-    } else {
-      // 메시지가 없는 경우 204 No Content 반환
-      return ResponseEntity.noContent().build();
-    }
+    // 메시지가 없을 경우 204 No Content 반환
+    return optionalMessages.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
   }
-
 }
