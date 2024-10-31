@@ -45,6 +45,9 @@ dependencies {
 	//RabbitMQ
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+	// Micrometer (Prometheus 지원)
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 tasks.named('test') {
