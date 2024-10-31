@@ -21,8 +21,8 @@ public class MemberService {
 
 
     public void registerMember(Member member) {
-        if (memberRepository.findByEmail(member.getEmail()).isPresent()) {
-            throw new Exceptionals("이미 사용 중인 이메일입니다.");
+        if (memberRepository.findByNickname(member.getNickname()).isPresent()) {
+            throw new Exceptionals("이미 사용 중인 닉네임입니다.");
         }
         if (memberRepository.findByName(member.getName()).isPresent()) {
             throw new Exceptionals("이미 사용 중인 이름입니다.");

@@ -1,9 +1,8 @@
 package com.GGomDDakPing.QnLove.QnLove.controller;
 
 import com.GGomDDakPing.QnLove.QnLove.dto.MemberLoginDto;
-import com.GGomDDakPing.QnLove.QnLove.dto.PostRegisterDto;
+import com.GGomDDakPing.QnLove.QnLove.dto.MemberRegisterDto;
 import com.GGomDDakPing.QnLove.QnLove.entity.Member;
-import com.GGomDDakPing.QnLove.QnLove.exceptional.Exceptionals;
 import com.GGomDDakPing.QnLove.QnLove.repository.MemberRepository;
 import com.GGomDDakPing.QnLove.QnLove.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,7 +43,7 @@ public class MemberController {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = PostRegisterDto.class)
+                            schema = @Schema(implementation = MemberRegisterDto.class)
                     )
             )
     )
@@ -54,9 +53,9 @@ public class MemberController {
             @ApiResponse(responseCode = "409", description = "중복된 데이터")
     })
     @PostMapping("/register")
-    public void  postRegister(@Valid @org.springframework.web.bind.annotation.RequestBody  PostRegisterDto postRegisterDto) {
+    public void  postRegister(@Valid @org.springframework.web.bind.annotation.RequestBody MemberRegisterDto memberRegisterDto) {
 
-        Member member = postRegisterDto.toEntity();
+        Member member = memberRegisterDto.toEntity();
 
         memberService.registerMember(member);
     }

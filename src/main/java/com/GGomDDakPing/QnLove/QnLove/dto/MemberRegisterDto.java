@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PostRegisterDto {
+public class MemberRegisterDto {
 
     @NotNull(message = "id 는 null 일 수 없습니다.")
     private String loginId;
@@ -18,8 +18,8 @@ public class PostRegisterDto {
     @NotNull(message = "이름이 비어있습니다.")
     private String name;
 
-    @NotNull(message = "이메일이 비어있습니다.")
-    private String email;
+    @NotNull(message = "닉네임이 비어있습니다.")
+    private String nickname;
 
     @NotNull(message = "성별이 비어있습니다.")
     private Long sex;
@@ -34,11 +34,11 @@ public class PostRegisterDto {
     private String profileImage;
 
     @Builder
-    public PostRegisterDto(String loginId, String password, String name, String email, Long sex, Long age, String instagramId, String profileImage) {
+    public MemberRegisterDto(String loginId, String password, String name, String nickname, Long sex, Long age, String instagramId, String profileImage) {
         this.loginId = loginId;
         this.password = password;
         this.name = name;
-        this.email = email;
+        this.nickname = nickname;
         this.sex = sex;
         this.age = age;
         this.instagramId = instagramId;
@@ -50,7 +50,7 @@ public class PostRegisterDto {
                 .loginId(loginId)
                 .password(password)
                 .name(name)
-                .email(email)
+                .nickname(nickname)
                 .instagramId(instagramId)
                 .profileImage(profileImage)
                 .sex(sex)
