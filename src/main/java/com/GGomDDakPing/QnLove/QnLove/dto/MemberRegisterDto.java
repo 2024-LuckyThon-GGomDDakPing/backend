@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class PostRegisterDto {
+public class MemberRegisterDto {
 
     @NotNull(message = "id 는 null 일 수 없습니다.")
     private String loginId;
@@ -34,7 +34,7 @@ public class PostRegisterDto {
     private String profileImage;
 
     @Builder
-    public PostRegisterDto(String loginId, String password, String name, String email, Long sex, Long age, String instagramId, String profileImage) {
+    public MemberRegisterDto(String loginId, String password, String name, String email, Long sex, Long age, String instagramId, String profileImage) {
         this.loginId = loginId;
         this.password = password;
         this.name = name;

@@ -1,6 +1,6 @@
 package com.GGomDDakPing.QnLove.QnLove.controller;
 
-import com.GGomDDakPing.QnLove.QnLove.dto.PostRegisterDto;
+import com.GGomDDakPing.QnLove.QnLove.dto.MemberRegisterDto;
 import com.GGomDDakPing.QnLove.QnLove.entity.Member;
 import com.GGomDDakPing.QnLove.QnLove.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,7 +32,7 @@ public class MemberController {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = PostRegisterDto.class)
+                            schema = @Schema(implementation = MemberRegisterDto.class)
                     )
             )
     )
@@ -43,18 +42,18 @@ public class MemberController {
             @ApiResponse(responseCode = "409", description = "중복된 데이터")
     })
     @PostMapping("/register")
-    public void  postRegister(@Valid @org.springframework.web.bind.annotation.RequestBody  PostRegisterDto postRegisterDto) {
+    public void  postRegister(@Valid @org.springframework.web.bind.annotation.RequestBody MemberRegisterDto memberRegisterDto) {
         System.out.println("=== DTO 값 확인 ===");
-        System.out.println("loginId: " + postRegisterDto.getLoginId());
-        System.out.println("password: " + postRegisterDto.getPassword());
-        System.out.println("name: " + postRegisterDto.getName());
-        System.out.println("email: " + postRegisterDto.getEmail());
-        System.out.println("sex: " + postRegisterDto.getSex());
-        System.out.println("age: " + postRegisterDto.getAge());
-        System.out.println("instagramId: " + postRegisterDto.getInstagramId());
-        System.out.println("profileImage: " + postRegisterDto.getProfileImage());
+        System.out.println("loginId: " + memberRegisterDto.getLoginId());
+        System.out.println("password: " + memberRegisterDto.getPassword());
+        System.out.println("name: " + memberRegisterDto.getName());
+        System.out.println("email: " + memberRegisterDto.getEmail());
+        System.out.println("sex: " + memberRegisterDto.getSex());
+        System.out.println("age: " + memberRegisterDto.getAge());
+        System.out.println("instagramId: " + memberRegisterDto.getInstagramId());
+        System.out.println("profileImage: " + memberRegisterDto.getProfileImage());
 
-        Member member = postRegisterDto.toEntity();
+        Member member = memberRegisterDto.toEntity();
 
         // Entity 각 필드 값 출력
         System.out.println("=== Entity 값 확인 ===");
