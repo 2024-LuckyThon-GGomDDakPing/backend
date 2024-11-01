@@ -61,7 +61,7 @@ public class ChatService {
   }
 
   public List<Message> getChatHistory(Long userId1, Long userId2) {
-    return messageRepository.findBySenderIdAndReceiverId(userId1, userId2);
+    return messageRepository.findChatHistory(userId1, userId2);
   }
 
   private void createQueueAndListener(String queueName) {
@@ -81,7 +81,6 @@ public class ChatService {
           try {
             Message receivedMessage = (Message) rabbitTemplate.getMessageConverter().fromMessage(message);
             log.info("ChatService : receivedMessage: {}", receivedMessage);
-            // 추가적인 메시지 처리 로직을 여기에 작성하세요
           } catch (Exception e) {
             log.error(e.getMessage());
           }
