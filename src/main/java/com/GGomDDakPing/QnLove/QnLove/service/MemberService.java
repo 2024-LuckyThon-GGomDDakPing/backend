@@ -51,4 +51,23 @@ public class MemberService {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new Exceptionals("존재하지 않는 회원입니다."));
     }
+
+    public String getNicknameById(Long memberId) {
+        // 회원 정보를 Optional<Member>로 가져옵니다.
+        Member member = memberRepository.findById(memberId)
+          .orElseThrow(() -> new Exceptionals("존재하지 않는 회원입니다."));
+
+        // 회원이 존재하면 닉네임을 반환합니다.
+        return member.getNickname();
+    }
+
+    public String getProfileImage(Long memberId) {
+        // 회원 정보를 Optional<Member>로 가져옵니다.
+        Member member = memberRepository.findById(memberId)
+          .orElseThrow(() -> new Exceptionals("존재하지 않는 회원입니다."));
+
+        // 회원이 존재하면 닉네임을 반환합니다.
+        return member.getProfileImage();
+    }
+
 }

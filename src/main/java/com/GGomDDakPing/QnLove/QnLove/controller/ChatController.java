@@ -1,15 +1,20 @@
 package com.GGomDDakPing.QnLove.QnLove.controller;
 
+import com.GGomDDakPing.QnLove.QnLove.dto.ChatSessionListDto;
+import com.GGomDDakPing.QnLove.QnLove.entity.ChatSession;
 import com.GGomDDakPing.QnLove.QnLove.entity.Message;
 import com.GGomDDakPing.QnLove.QnLove.service.ChatService;
+import com.GGomDDakPing.QnLove.QnLove.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -18,11 +23,13 @@ public class ChatController {
 
   private final ChatService chatService;
   private final RabbitTemplate rabbitTemplate;
+  private final MemberService memberService;
 
   @Autowired
-  public ChatController(ChatService chatService, RabbitTemplate rabbitTemplate) {
+  public ChatController(ChatService chatService, RabbitTemplate rabbitTemplate, MemberService memberService) {
     this.chatService = chatService;
     this.rabbitTemplate = rabbitTemplate;
+    this.memberService = memberService;
   }
 
   // 메시지 전송
@@ -33,11 +40,33 @@ public class ChatController {
     chatService.sendMessage(senderId, receiverId, content);
   }
 
+  @GetMapping("/{memberId}")
+  public List<ChatSessionListDto> getChatSessions(@PathVariable Long memberId) {
+    List<ChatSession> chatSessionList = chatService.getChatSessions(memberId);
+
+    // chatSessionList를 순회하여 ChatSessionListDto로 변환
+    return chatSessionList.stream()
+      .map(chatSession -> {
+        Long memId = chatService.getOtherMemberId(memberId, chatSession.getId());
+        String nickName = memberService.getNicknameById(memId);
+        String profileImage = memberService.getProfileImage(memId);
+        String lastMessage = chatService.getLastMessage(memberId,memId);
+
+        return ChatSessionListDto.builder()
+          .nickname(nickName)
+          .profileImage(profileImage)
+          .lastMessage(lastMessage)
+          .build();
+      })
+      .collect(Collectors.toList());
+  }
+
+
   // 채팅 기록 조회
   @GetMapping("/history")
-  public List<Message> getChatHistory(@RequestParam Long userId1,
-                                      @RequestParam Long userId2) {
-    return chatService.getChatHistory(userId1, userId2);
+  public List<Message> getChatHistory(@RequestParam Long member1Id,
+                                      @RequestParam Long member2Id) {
+    return chatService.getChatHistory(member1Id, member2Id);
   }
 
   // 채팅방 별 큐에서 수신 대기
