@@ -3,6 +3,7 @@ package com.GGomDDakPing.QnLove.QnLove.dto;
 import com.GGomDDakPing.QnLove.QnLove.entity.Member;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -30,11 +31,8 @@ public class MemberRegisterDto {
     @NotNull(message = "인스타그램 아이디가 비어있습니다.")
     private String instagramId;
 
-    @NotNull(message = "프로필 이미지가 비어있습니다.")
-    private String profileImage;
-
     @Builder
-    public MemberRegisterDto(String loginId, String password, String name, String nickname, Long sex, Long age, String instagramId, String profileImage) {
+    public MemberRegisterDto(String loginId, String password, String name, String nickname, Long sex, Long age, String instagramId, MultipartFile profileImage) {
         this.loginId = loginId;
         this.password = password;
         this.name = name;
@@ -42,7 +40,6 @@ public class MemberRegisterDto {
         this.sex = sex;
         this.age = age;
         this.instagramId = instagramId;
-        this.profileImage = profileImage;
     }
 
     public Member toEntity() {
@@ -52,7 +49,6 @@ public class MemberRegisterDto {
                 .name(name)
                 .nickname(nickname)
                 .instagramId(instagramId)
-                .profileImage(profileImage)
                 .sex(sex)
                 .age(age)
                 .build();

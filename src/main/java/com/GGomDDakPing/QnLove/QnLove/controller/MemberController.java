@@ -5,6 +5,7 @@ import com.GGomDDakPing.QnLove.QnLove.dto.MemberRegisterDto;
 import com.GGomDDakPing.QnLove.QnLove.entity.Member;
 import com.GGomDDakPing.QnLove.QnLove.repository.MemberRepository;
 import com.GGomDDakPing.QnLove.QnLove.service.MemberService;
+import com.GGomDDakPing.QnLove.QnLove.service.S3Service;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,25 +15,31 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/members")
 public class MemberController {
 
     private final MemberService memberService;
     private final MemberRepository memberRepository;
+    private final S3Service s3Service;
     public static Hashtable<String, HttpSession> sessionList = new Hashtable<>();
 
 
     @Autowired
-    public MemberController(MemberService memberService, MemberRepository memberRepository) {
+    public MemberController(MemberService memberService, MemberRepository memberRepository, S3Service s3Service) {
         this.memberService = memberService;
         this.memberRepository = memberRepository;
+        this.s3Service = s3Service;
     }
 
     @Operation(
@@ -42,7 +49,7 @@ public class MemberController {
                     description = "회원가입에 필요한 데이터",
                     required = true,
                     content = @Content(
-                            mediaType = "application/json",
+                            mediaType = "multipart/form-data",
                             schema = @Schema(implementation = MemberRegisterDto.class)
                     )
             )
@@ -52,13 +59,30 @@ public class MemberController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청 데이터"),
             @ApiResponse(responseCode = "409", description = "중복된 데이터")
     })
-    @PostMapping("/register")
-    public void  postRegister(@Valid @org.springframework.web.bind.annotation.RequestBody MemberRegisterDto memberRegisterDto) {
+    @PostMapping(value = "/register", consumes = "multipart/form-data")
+    public void postRegister(
+      @Valid @ModelAttribute MemberRegisterDto memberRegisterDto,
+      @RequestPart MultipartFile photo) {
+      Member member;
+      try {
+        member = Member.builder()
+          .name(memberRegisterDto.getName())
+          .profileImage(s3Service.uploadImage(photo))
+          .nickname(memberRegisterDto.getNickname())
+          .instagramId(memberRegisterDto.getInstagramId())
+          .password(memberRegisterDto.getPassword())
+          .loginId(memberRegisterDto.getLoginId())
+          .sex(memberRegisterDto.getSex())
+          .age(memberRegisterDto.getAge())
+          .build();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
 
-        Member member = memberRegisterDto.toEntity();
-
-        memberService.registerMember(member);
+      memberService.registerMember(member);
     }
+
+
     @Operation(
             summary = "로그인",
             description = "로그인 API",
