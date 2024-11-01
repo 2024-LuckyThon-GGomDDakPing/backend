@@ -48,6 +48,12 @@ dependencies {
 
 	// Micrometer (Prometheus 지원)
 	implementation 'io.micrometer:micrometer-registry-prometheus'
+
+	// AWS S3
+	implementation 'io.awspring.cloud:spring-cloud-aws-starter:3.1.1'
+
+	implementation 'software.amazon.awssdk:s3:2.20.6' // 사용하고자 하는 AWS SDK 버전으로 업데이트하세요.
+	implementation 'software.amazon.awssdk:core:2.20.6'
 }
 
 tasks.named('test') {
