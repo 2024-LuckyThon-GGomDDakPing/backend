@@ -56,12 +56,29 @@ public class ChatService {
     rabbitTemplate.convertAndSend(queueName, message);
   }
 
-  public String generateSessionId(Long user1, Long user2) {
-    return user1.compareTo(user2) < 0 ? user1 + "-" + user2 : user2 + "-" + user1; // 정렬된 세션 ID 생성
+  public String generateSessionId(Long member1Id, Long member2Id) {
+    return member1Id.compareTo(member2Id) < 0 ? member1Id + "-" + member2Id : member2Id + "-" + member1Id; // 정렬된 세션 ID 생성
   }
 
-  public List<Message> getChatHistory(Long userId1, Long userId2) {
-    return messageRepository.findChatHistory(userId1, userId2);
+  public List<Message> getChatHistory(Long member1Id, Long member2Id) {
+    return messageRepository.findChatHistory(member1Id, member2Id);
+  }
+
+  public List<ChatSession> getChatSessions(Long memberId) {
+    return chatSessionRepository.findByMemberId(memberId);
+  }
+
+  public Long getOtherMemberId(Long memberId, String id) {
+    return chatSessionRepository.findOtherMemberIdByChatSessionId(id, memberId);
+  }
+
+  public String getLastMessage(Long userId1, Long userId2) {
+    List<String> messages = messageRepository.findLastMessage(userId1, userId2);
+
+    // 가장 최근 메시지가 있으면 반환, 없으면 기본 메시지 반환
+    return messages.stream()
+      .findFirst() // 가장 최근 메시지 하나만 선택
+      .orElse("No messages found"); // 메시지가 없을 경우 기본 반환값
   }
 
   private void createQueueAndListener(String queueName) {
