@@ -9,6 +9,12 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ *
+ * @author : frozzun
+ * @filename :PostCreateDto.java
+ * @since 10/15/24
+ */
 @Getter
 @Setter
 @Builder

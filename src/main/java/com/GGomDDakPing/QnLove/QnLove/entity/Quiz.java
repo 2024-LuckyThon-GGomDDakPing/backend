@@ -8,6 +8,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+/**
+ *
+ * @author : frozzun
+ * @filename :Quiz.java
+ * @since 10/12/24
+ */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table

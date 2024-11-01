@@ -6,6 +6,12 @@ import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ *
+ * @author : frozzun
+ * @filename :SwaggerConfig.java
+ * @since 10/12/24
+ */
 @Configuration
 public class SwaggerConfig {
   @Bean

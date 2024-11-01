@@ -6,6 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 
+/**
+ *
+ * @author : frozzun
+ * @filename :PostListDto.java
+ * @since 10/18/24
+ */
 @Getter
 @Setter
 @Builder

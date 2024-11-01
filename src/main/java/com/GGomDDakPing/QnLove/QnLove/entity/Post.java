@@ -10,6 +10,12 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ *
+ * @author : frozzun
+ * @filename :Post.java
+ * @since 10/12/24
+ */
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter

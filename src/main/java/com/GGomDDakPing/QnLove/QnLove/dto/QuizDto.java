@@ -5,6 +5,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ *
+ * @author : frozzun
+ * @filename :QuizDto.java
+ * @since 10/15/24
+ */
 @Getter
 @Setter
 @Builder

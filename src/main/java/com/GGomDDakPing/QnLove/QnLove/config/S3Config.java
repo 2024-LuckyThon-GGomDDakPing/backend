@@ -9,6 +9,12 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+/**
+ *
+ * @author : frozzun
+ * @filename :S3Config.java
+ * @since 10/31/24
+ */
 @Configuration
 public class S3Config {
 

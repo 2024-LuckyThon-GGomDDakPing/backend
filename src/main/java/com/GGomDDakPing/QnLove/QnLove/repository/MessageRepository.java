@@ -8,6 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ *
+ * @author : frozzun
+ * @filename :MessageRepository.java
+ * @since 11/01/24
+ */
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
   List<Message> findBySenderIdAndReceiverId(Long senderId, Long receiverId);

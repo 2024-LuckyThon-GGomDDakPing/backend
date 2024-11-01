@@ -16,6 +16,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ *
+ * @author : frozzun
+ * @filename :ChatController.java
+ * @since 10/31/24
+ */
 @Slf4j
 @RestController
 @RequestMapping("/chat")

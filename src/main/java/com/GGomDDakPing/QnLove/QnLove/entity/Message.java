@@ -5,6 +5,12 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+/**
+ *
+ * @author : frozzun
+ * @filename :Message.java
+ * @since 11/01/24
+ */
 @Entity
 @Table(name = "messages")
 @Data

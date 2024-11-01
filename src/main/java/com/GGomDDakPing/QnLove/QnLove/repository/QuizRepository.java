@@ -7,6 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ *
+ * @author : frozzun
+ * @filename :QuizRepository.java
+ * @since 10/15/24
+ */
 @Repository
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
   List<Quiz> findAllByPost(Post post);

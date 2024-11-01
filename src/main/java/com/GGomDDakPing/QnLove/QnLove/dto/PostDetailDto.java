@@ -7,6 +7,13 @@ import lombok.Setter;
 
 import java.util.List;
 
+
+/**
+ *
+ * @author : frozzun
+ * @filename :PostDetailDto.java
+ * @since 10/25/24
+ */
 @Getter
 @Setter
 @Builder

@@ -8,6 +8,13 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
+/**
+ *
+ * @author : frozzun
+ * @filename :RabbitConfig.java
+ * @since 10/31/24
+ */
 @Configuration
 public class RabbitConfig {
 

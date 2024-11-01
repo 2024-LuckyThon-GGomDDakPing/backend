@@ -7,6 +7,12 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+/**
+ *
+ * @author : frozzun
+ * @filename :ChatSessionRepository.java
+ * @since 11/02/24
+ */
 public interface ChatSessionRepository extends JpaRepository<ChatSession, String> {
   @Query("SELECT c FROM ChatSession c WHERE c.member1Id = :memberId OR c.member2Id = :memberId")
   List<ChatSession> findByMemberId(@Param("memberId") Long memberId);

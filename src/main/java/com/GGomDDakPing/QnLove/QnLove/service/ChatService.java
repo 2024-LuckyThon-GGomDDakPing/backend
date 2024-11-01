@@ -16,6 +16,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *
+ * @author : frozzun
+ * @filename :ChatService.java
+ * @since 11/01/24
+ */
 @Slf4j
 @Service
 public class ChatService {

@@ -5,6 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ *
+ * @author : frozzun
+ * @filename :ChatSession.java
+ * @since 10/29/24
+ */
 @Entity
 @Table(name = "chat_sessions")
 @Data

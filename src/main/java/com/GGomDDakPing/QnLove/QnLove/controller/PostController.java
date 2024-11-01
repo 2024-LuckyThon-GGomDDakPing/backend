@@ -33,7 +33,12 @@ public class PostController {
   private MemberService memberService;
 
 
-
+  /**
+   *
+   * @author : frozzun
+   * @filename :PostController.java
+   * @since 10/15/24
+   */
   @Autowired
   public PostController(PostService postService, MemberService memberService, QuizService quizService) {
     this.postService = postService;

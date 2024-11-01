@@ -9,6 +9,12 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * @author : frozzun
+ * @filename :QuizService.java
+ * @since 10/24/24
+ */
 @Service
 public class QuizService {
   private final QuizRepository quizRepository;
