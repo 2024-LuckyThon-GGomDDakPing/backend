@@ -53,6 +53,7 @@ public class ChatController {
         String lastMessage = chatService.getLastMessage(memberId,memId);
 
         return ChatSessionListDto.builder()
+          .otherMemberId(memId)
           .nickname(nickName)
           .profileImage(profileImage)
           .lastMessage(lastMessage)
@@ -60,6 +61,7 @@ public class ChatController {
       })
       .collect(Collectors.toList());
   }
+
 
 
   // 채팅 기록 조회

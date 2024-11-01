@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatSessionListDto {
+  private Long otherMemberId;
   private String profileImage;
   private String nickname;
   private String lastMessage;
